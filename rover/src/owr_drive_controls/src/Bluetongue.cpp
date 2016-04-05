@@ -235,7 +235,7 @@ struct status Bluetongue::update(double leftFMotor, double rightFMotor,
     mesg.lidarTilt = lidarTilt; //Testing Lidar positioning.
     
     //Test constraints for osciallting lidar. Ignores function inputs
-    if(testLidar >= 1700){
+/*    if(testLidar >= 1700){
         testDirection = BACKWARDS; // change direction at 45 degrees from oriz.
         testLidar -= PWM_SHIFT;
     } else if (testLidar <= 960){
@@ -244,7 +244,7 @@ struct status Bluetongue::update(double leftFMotor, double rightFMotor,
     } else {
         testLidar += PWM_SHIFT * (1 - (2 * testDirection)); // equivalent of, if(forward), increment, if(backward) decrement
     }
-    
+*/    
     
     //ROS_INFO("rotate %d grip %d", mesg.clawRotate, mesg.clawGrip);
 	//ROS_INFO("Speeds %d %d", mesg.lSpeed, mesg.rSpeed);
@@ -255,8 +255,6 @@ struct status Bluetongue::update(double leftFMotor, double rightFMotor,
     //        mesg.armBottom, mesg.armRotate);
     //ROS_INFO("Camera br %d bt %d tr %d tt %d", cameraBottomRotate,
     //        cameraBottomTilt, cameraTopRotate, cameraTopTilt);
-    ROS_INFO("left magnet bit value %d", leftMag);
-    ROS_INFO("right magnet bit value %d", rightMag);
     //ROS_INFO("***** Lidar: %d ****", mesg.lidarTilt);
     
 //     ROS_INFO("rotate %d grip %d", mesg.clawRotate, mesg.clawGrip);
@@ -304,7 +302,10 @@ struct status Bluetongue::update(double leftFMotor, double rightFMotor,
     stat.enc4 = resp.enc4 * ENC_MULTIPLIER;
     stat.enc5 = resp.enc5 * ENC_MULTIPLIER;
     
-    ROS_INFO("Encoder speeds %d, %d, %d, %d, %d, %d", resp.enc0, resp.enc1, resp.enc2, resp.enc3, resp.enc4, resp.enc5);
+    ROS_INFO("left magnet bit value %d", resp.leftMag);
+    ROS_INFO("right magnet bit value %d", resp.rightMag);
+    
+    //ROS_INFO("Encoder speeds %d, %d, %d, %d, %d, %d", resp.enc0, resp.enc1, resp.enc2, resp.enc3, resp.enc4, resp.enc5);
 
         
 //     jointMsg.header.stamp = ros::Time::now(); // timestamp for joint 
@@ -346,7 +347,7 @@ struct status Bluetongue::update(double leftFMotor, double rightFMotor,
 // gimbal. Angle is measured from horizontal (1330:pwm = 0 rads), with tilting
 // towards the front of the rover measured as positive radians, and tilting in
 // the opposite direction as negative.
-void Bluetongue::tf_lidar(int16_t pwm){
+/*void Bluetongue::tf_lidar(int16_t pwm){
     double lidarRads;
     double lidarVel;
     
@@ -362,6 +363,6 @@ void Bluetongue::tf_lidar(int16_t pwm){
     }
     publish_joint("laser_tilt_joint", lidarRads, lidarVel, 0, LIDAR_JOINT);
 }
-
+*/
 
     
