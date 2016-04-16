@@ -70,3 +70,18 @@ void GearPositionTracker::resetPos() {
     times.clear();
     mutext.unlock();
 }
+
+void GearPositionTracker::posSet(double angle, ros::Time time) { //resets the gear position when triggered by the magnet sensors
+    
+    mutext.lock(); 
+    
+    positions.clear();
+    velocities.clear();
+    times.clear();
+    
+    velocities.push_back(0);
+    positions.push_back(angle); 
+    times.push_back(time);
+    
+    mutext.unlock();
+}

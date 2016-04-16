@@ -66,6 +66,9 @@ struct status {
     double enc3;
     double enc4;
     double enc5;
+    
+    int leftMagFront;
+    int leftMagBack;
 };
     
 class Bluetongue {

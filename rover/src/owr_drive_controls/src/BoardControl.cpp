@@ -17,6 +17,7 @@
 #include <geometry_msgs/Vector3.h>
 #include <std_msgs/Float64.h>
 #include <limits>
+#include <math.h>
 
 #define MOTOR_MID 1500.0
 #define MOTOR_MAX 1900.0
@@ -347,6 +348,16 @@ void BoardControl::run() {
             frontLeftSwerveGears.updatePos(-s.enc0, lastUpdate);
             frontRightSwerveGears.updatePos(s.enc5, lastUpdate);
             
+            //initialise the wheel positions
+            if(s.leftMagFront == 1){
+                frontLeftSwerveGears.posSet(M_PI, lastUpdate); // In degrees, passing in general degrees angle
+            }
+    
+            if(s.leftMagBack == 1){
+                frontLeftSwerveGears.posSet(-M_PI, lastUpdate); // In degrees, passing in general degrees angle
+            }
+            
+            
             //do joint calculations
             //TODO: check if empty
             swerveMotorVels swerveState = doVelTranslation(&(currentVel));
@@ -359,6 +370,8 @@ void BoardControl::run() {
             pwmFLS =  frontLeftSwerve.posToPWM(frontLeftSwerveGears.getPosition(), updateRateHZ);
             pwmLIDAR = lidar.velToPWM();
             
+			
+			
             //adjust the arm position
             armRotateAngle += armRotateRate;
             pwmArmRot = (armRotateRate * 500) + 1500;

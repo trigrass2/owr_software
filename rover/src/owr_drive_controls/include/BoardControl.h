@@ -83,6 +83,9 @@ class BoardControl {
         int rotState; // On-Off
         //int clawState;
         
+        //Magnet Sensor values
+        
+        
         //to keep track of button states. It is possible press could change it
         int cam0Button, cam1Button, cam2Button, cam3Button;
         
@@ -92,7 +95,7 @@ class BoardControl {
         //current velocity from imu
         geometry_msgs::Twist currentVel;
         
-        //new joints stuff
+        //new joints stuff 
         JointsMonitor jMonitor;
         JointVelocityController frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel;
         JointSpeedBasedPositionController frontLeftSwerve, frontRightSwerve, backLeftSwerve, backRightSwerve;

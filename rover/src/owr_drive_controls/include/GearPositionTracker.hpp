@@ -16,6 +16,7 @@ class GearPositionTracker {
         void updatePos(double speed, ros::Time current);
         void resetPos();
         double getPosition();
+		void posSet(double angle, ros::Time time);
     private:
         const std::vector< double > gears;
         std::vector < double > velocities;
