@@ -39,7 +39,6 @@ struct toControlMsg {
     int16_t cameraTopTilt;
     int16_t lidarTilt;
     int16_t padding;
-    
 } __attribute__((packed));
 
 //expect RPM is 6/m = 2.513274123rads/s
@@ -63,8 +62,8 @@ struct toNUCMsg {
     int16_t enc4;
     int16_t enc5;
     
-    int16_t leftMagFront;
-    int16_t leftMagBack;
+    int16_t leftMag;
+    int16_t rightMag;
     
 } __attribute__((packed));
 
@@ -134,6 +133,8 @@ bool Bluetongue::connect() {
 Bluetongue::Bluetongue(const char* port) {
     //lidarTFPublisher = nh.advertise<sensor_msgs::JointState>("joint_states", 10);
     //timeSeq = 0;
+    
+    
     
     // Open serial port
     bluetongue_port = port;
@@ -228,24 +229,21 @@ struct status Bluetongue::update(double leftFMotor, double rightFMotor,
     mesg.cameraTopRotate = cameraTopRotate;
     mesg.cameraTopTilt = cameraTopTilt;
     
-    //sends magnet data to control board
-    
-    
     //mesg.lidarTilt = (lidarTilt * 500) + 1500; // Use this line when reading lidar from a joystick
     //mesg.lidarTilt = 1295;
     
     mesg.lidarTilt = lidarTilt; //Testing Lidar positioning.
     
     //Test constraints for osciallting lidar. Ignores function inputs
- //   if(testLidar >= 1700){
-      //  testDirection = BACKWARDS; // change direction at 45 degrees from oriz.
-        //testLidar -= PWM_SHIFT;
-    //} else if (testLidar <= 960){
-   //     testDirection = FORWARDS; //change direction at 45 degrees from horiz.
-     //   testLidar += PWM_SHIFT;
-    //} else {
-       // testLidar += PWM_SHIFT * (1 - (2 * testDirection)); // equivalent of, if(forward), increment, if(backward) decrement
-    //}
+/*    if(testLidar >= 1700){
+        testDirection = BACKWARDS; // change direction at 45 degrees from oriz.
+        testLidar -= PWM_SHIFT;
+    } else if (testLidar <= 960){
+        testDirection = FORWARDS; //change direction at 45 degrees from horiz.
+        testLidar += PWM_SHIFT;
+    } else {
+        testLidar += PWM_SHIFT * (1 - (2 * testDirection)); // equivalent of, if(forward), increment, if(backward) decrement
+    }
     
     
     //ROS_INFO("rotate %d grip %d", mesg.clawRotate, mesg.clawGrip);
@@ -257,11 +255,8 @@ struct status Bluetongue::update(double leftFMotor, double rightFMotor,
     //        mesg.armBottom, mesg.armRotate);
     //ROS_INFO("Camera br %d bt %d tr %d tt %d", cameraBottomRotate,
     //        cameraBottomTilt, cameraTopRotate, cameraTopTilt);
-    ROS_INFO("left magnet bit value %d", stat.leftMagFront);
-    ROS_INFO("right magnet bit value %d", stat.leftMagBack);
-	
-	
-	
+    ROS_INFO("left magnet bit value %d", leftMag);
+    ROS_INFO("right magnet bit value %d", rightMag);
     //ROS_INFO("***** Lidar: %d ****", mesg.lidarTilt);
     
 //     ROS_INFO("rotate %d grip %d", mesg.clawRotate, mesg.clawGrip);
