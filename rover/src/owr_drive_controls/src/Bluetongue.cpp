@@ -61,10 +61,6 @@ struct toNUCMsg {
     int16_t enc3;
     int16_t enc4;
     int16_t enc5;
-    
-    int16_t leftMag;
-    int16_t rightMag;
-    
 } __attribute__((packed));
 
 bool Bluetongue::reconnect(void) {
@@ -234,30 +230,8 @@ struct status Bluetongue::update(double leftFMotor, double rightFMotor,
     
     mesg.lidarTilt = lidarTilt; //Testing Lidar positioning.
     
-    //Test constraints for osciallting lidar. Ignores function inputs
-/*    if(testLidar >= 1700){
-        testDirection = BACKWARDS; // change direction at 45 degrees from oriz.
-        testLidar -= PWM_SHIFT;
-    } else if (testLidar <= 960){
-        testDirection = FORWARDS; //change direction at 45 degrees from horiz.
-        testLidar += PWM_SHIFT;
-    } else {
-        testLidar += PWM_SHIFT * (1 - (2 * testDirection)); // equivalent of, if(forward), increment, if(backward) decrement
-    }
     
     
-    //ROS_INFO("rotate %d grip %d", mesg.clawRotate, mesg.clawGrip);
-	//ROS_INFO("Speeds %d %d", mesg.lSpeed, mesg.rSpeed);
-	//ROS_INFO("Writing %d bytes.", (int) sizeof(struct toControlMsg));
-	//ROS_INFO("Claw grip %d rotate %d", mesg.clawGrip, 
-    //        mesg.clawRotate);
-    //ROS_INFO("Arm top %d bottom %d rotate %d", mesg.armTop, 
-    //        mesg.armBottom, mesg.armRotate);
-    //ROS_INFO("Camera br %d bt %d tr %d tt %d", cameraBottomRotate,
-    //        cameraBottomTilt, cameraTopRotate, cameraTopTilt);
-    ROS_INFO("left magnet bit value %d", leftMag);
-    ROS_INFO("right magnet bit value %d", rightMag);
-    //ROS_INFO("***** Lidar: %d ****", mesg.lidarTilt);
     
 //     ROS_INFO("rotate %d grip %d", mesg.clawRotate, mesg.clawGrip);
 //     ROS_INFO("Speeds %d %d %d %d", mesg.flSpeed, mesg.frSpeed, mesg.blSpeed, mesg.brSpeed);
@@ -303,12 +277,8 @@ struct status Bluetongue::update(double leftFMotor, double rightFMotor,
     stat.enc3 = resp.enc3 * ENC_MULTIPLIER;
     stat.enc4 = resp.enc4 * ENC_MULTIPLIER;
     stat.enc5 = resp.enc5 * ENC_MULTIPLIER;
-	//assigns local magent value to status struct
-    stat.leftMagBack = resp.leftMagBack;
-    stat.leftMagFront = resp.leftMagFront;
     
     ROS_INFO("Encoder speeds %d, %d, %d, %d, %d, %d", resp.enc0, resp.enc1, resp.enc2, resp.enc3, resp.enc4, resp.enc5);
-
         
 //     jointMsg.header.stamp = ros::Time::now(); // timestamp for joint 
 //     jointMsg.header.stamp.sec += SECONDS_DELAY; // slight adjustment made for lidar's real-time position changing
@@ -345,26 +315,7 @@ struct status Bluetongue::update(double leftFMotor, double rightFMotor,
     return stat;
 }
 
-// Sends rviz an angle (radians) representing the current position of the lidar
-// gimbal. Angle is measured from horizontal (1330:pwm = 0 rads), with tilting
-// towards the front of the rover measured as positive radians, and tilting in
-// the opposite direction as negative.
-void Bluetongue::tf_lidar(int16_t pwm){
-    double lidarRads;
-    double lidarVel;
-    
-    lidarRads = pwm - LIDAR_HORIZ;
 
-    lidarRads = lidarRads * DEG_PER_PWM;//Find angle in degrees
-    lidarRads = lidarRads * M_PI/180;//Convert to radians
-    
-    lidarVel = (PWM_SHIFT * LIDAR_FREQ) * DEG_PER_PWM * (M_PI/180); // find velocity in rad/s
-    
-    if(testDirection){
-        lidarVel = lidarVel * (-1);
-    }
-    publish_joint("laser_tilt_joint", lidarRads, lidarVel, 0, LIDAR_JOINT);
-}
 
 
     
