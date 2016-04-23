@@ -288,7 +288,7 @@ struct status Bluetongue::update(double leftFMotor, double rightFMotor,
     
     
     ROS_INFO("Encoder speeds %d, %d, %d, %d, %d, %d", resp.enc0, resp.enc1, resp.enc2, resp.enc3, resp.enc4, resp.enc5);
-        
+    ROS_INFO("magposition values %d %d", resp.leftMagBack, resp.leftMagFront);
 //     jointMsg.header.stamp = ros::Time::now(); // timestamp for joint 
 //     jointMsg.header.stamp.sec += SECONDS_DELAY; // slight adjustment made for lidar's real-time position changing
 //     jointMsg.header.seq = timeSeq; // sequence ID
